@@ -72,7 +72,7 @@ const navItems: NavItem[] = [
         path: "/withdrawals",
         icon: <HorizontaLDots />,
       },
-      { name: "Reports", path: "/reports", icon: <ChevronDownIcon /> },
+      // { name: "Reports", path: "/reports", icon: <ChevronDownIcon /> },
     ],
   },
   {
