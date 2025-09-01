@@ -49,12 +49,29 @@ interface Ticket {
 }
 
 export default function Home() {
-  const [userData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [, setCurrentTime] = useState<string>("");
   const [products, setProducts] = useState<Product[]>([]);
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Decrypt and load user data when component mounts
+    try {
+      const encryptedUserData = localStorage.getItem("userData");
+
+      if (encryptedUserData) {
+        const decryptedUserData = decryptData(encryptedUserData);
+        console.log("Decrypted User Data:", decryptedUserData);
+        setUserData(decryptedUserData);
+      } else {
+        console.log("No user data found in localStorage");
+      }
+    } catch (error) {
+      console.error("Failed to decrypt user data:", error);
+    }
+  }, []);
 
   // Fetch products from API
   const fetchProducts = async () => {
@@ -93,7 +110,7 @@ export default function Home() {
       );
 
       console.log("Account Balance:", response.data);
-      setBalance(response.data.walletBalance ?? 0); // save balance to state
+      setBalance(response.data.data.walletBalance ?? 0); // save balance to state
     } catch (error) {
       console.error("Error fetching account balance:", error);
       message.error("Failed to fetch account balance");
